@@ -38,7 +38,14 @@ public class TestQueries {
 	   
 		ResultSet result = stmt.executeQuery(query);
 	   while (result.next()) {
-	      System.out.println(result.getInt("authorID") + "\t\t" + result.getString("firstName") + "\t\t" + result.getString("lastName"));
+			int id = result.getInt("authorID");
+			String fName = result.getString("firstName");
+			String lName = result.getString("lastName");
+			if(fName.length() < 8) {
+	      	System.out.println(id + "\t\t" + fName + "\t\t" + lName);
+			} else {
+				System.out.println(id + "\t\t" + fName + "\t" + lName);
+			}
 	   }
 	}
 }

@@ -7,9 +7,10 @@ public class CreateTables {
 	   Statement stmt = null;
 	   try{
 
-	   	System.out.println("Would you like to delete all the data? (y/n) ");
+	   	System.out.print("Are you sure you want to delete all the data? (y/n): ");
 		Scanner scan = new Scanner(System.in);
-		String input = scan.nextLine();
+		String input = scan.next();
+		System.out.println();
 
 		if(input.equals("y") || input.equals("Y") ) {
 			// Open a connection
@@ -63,7 +64,7 @@ public class CreateTables {
 			updateTitles(stmt);
 			updatePublishers(stmt);
 
-			System.out.println("\tTest data sucessfully inserted!");
+			System.out.println("Test data sucessfully inserted!");
 		}
 
 	   } catch(SQLException se) {

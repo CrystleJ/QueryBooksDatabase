@@ -16,17 +16,21 @@ public class JDBC {
 			throw new SQLException();
 		}
 
-		Scanner scan = new Scanner(System.in);
+		String url = null, username = null, password = null;
 
-		System.out.println("Answer the following questions to connect to your database: ");
-		System.out.print("\tEnter your database url: ");
-		String url = scan.next();
+		if(url == null || username == null || password == null) {
+			Scanner scan = new Scanner(System.in);
 
-		System.out.print("\n\tEnter your database username: ");
-		String username = scan.next();
+			System.out.println("Answer the following questions to connect to your database: ");
+			System.out.print("\tEnter your database url: ");
+			url = scan.next();
 
-		System.out.print("\n\tEnter your database password: ");
-		String password = scan.next();
+			System.out.print("\n\tEnter your database username: ");
+			username = scan.next();
+
+			System.out.print("\n\tEnter your database password: ");
+			password = scan.next();
+		}
 
 		System.out.println("\nTrying to connect to database ... ");
 		connection = DriverManager.getConnection(url, username, password);
