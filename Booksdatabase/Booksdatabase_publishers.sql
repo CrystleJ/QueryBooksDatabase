@@ -16,27 +16,27 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `publishers`
+-- Table structure for table `Publishers`
 --
 
-DROP TABLE IF EXISTS `publishers`;
+DROP TABLE IF EXISTS `Publishers`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
  SET character_set_client = utf8mb4 ;
-CREATE TABLE `publishers` (
-  `publisherID` int(11) NOT NULL,
+CREATE TABLE `Publishers` (
+  `publisherID` int(11) NOT NULL AUTO_INCREMENT,
   `publisherName` char(100) DEFAULT NULL,
   PRIMARY KEY (`publisherID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `publishers`
+-- Dumping data for table `Publishers`
 --
 
-LOCK TABLES `publishers` WRITE;
-/*!40000 ALTER TABLE `publishers` DISABLE KEYS */;
-INSERT INTO `publishers` VALUES (0,'Modern Library'),(1,'Penguin Books'),(2,'Penguin Classics'),(3,'Anchor'),(4,'Vintage'),(5,'CreateSpace Independent Publishing Platform'),(6,'Digireads.com'),(7,'Del Rey'),(8,'Laurel Leaf'),(9,'Everyman\'s Library'),(10,'Berkley'),(11,'Collectible First Editions'),(12,'Bloomsbury Academy'),(13,'Houghton Milfflin Harcourt'),(14,'Chelsea House Pub');
-/*!40000 ALTER TABLE `publishers` ENABLE KEYS */;
+LOCK TABLES `Publishers` WRITE;
+/*!40000 ALTER TABLE `Publishers` DISABLE KEYS */;
+INSERT INTO `Publishers` VALUES (1,'Modern Library'),(2,'Penguin Books'),(3,'Penguin Classics'),(4,'Anchor'),(5,'Vintage'),(6,'CreateSpace Independent Publishing Platform'),(7,'Digireads.com'),(8,'Laurel Leaf'),(9,'Everyman\'s Library'),(10,'Berkley'),(11,'Collectible First Editions'),(12,'Bloomsbury Academy'),(13,'Houghton Milfflin Harcourt'),(14,'Chelsea House Pub');
+/*!40000 ALTER TABLE `Publishers` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -48,4 +48,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-11-26  2:31:05
+-- Dump completed on 2018-11-26 19:29:22
