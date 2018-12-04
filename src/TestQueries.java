@@ -122,9 +122,9 @@ public class TestQueries {
 	   
 	   // Create new author
 	   String query4Author = "INSERT INTO Authors (authorID, firstName, lastName)" +
-	      				       "VALUES ('16', 'William', 'Shakespeare')"; 
+	      				       "VALUES ('16', 'Will', 'Shakespeare')"; 
 	   stmt.executeUpdate(query4Author);
-	   System.out.println("Added Author 'William Shakespeare'");
+	   System.out.println("Added Author 'Will Shakespeare'");
 
 	   String query = "SELECT * FROM authors"; 
 	      
@@ -134,169 +134,206 @@ public class TestQueries {
 	      int id = rs1.getInt("authorID");
 	      String firstName = rs1.getString("firstName");
 	      String lastName = rs1.getString("lastName");
-	      System.out.println(id + "\t" + firstName + "\t" + lastName);
+	      if(firstName.length() < 8) {
+	      	System.out.println(id + "\t\t" + firstName + "\t\t" + lastName);
+			} else {
+				System.out.println(id + "\t\t" + firstName + "\t" + lastName);
+			}
 	   }
 	}
-	
+
 	/* Edit/Update the existing information about an author */
 	public static void query5(Statement stmt) throws SQLException {
-		// Execute a query
-		stmt = JDBC.connection.createStatement();
-
+		
 		String query = "SELECT * FROM authors"; 
 
-		// Prints the original Value
-		ResultSet rs1 = stmt.executeQuery(query);
-		System.out.println("Author's name changed from : ");
-		while(rs1.next()){
-			int id = rs1.getInt("authorID");
+		// Retrieve and print the original Value
+		ResultSet orginal_result = stmt.executeQuery(query);
+
+		int id = 0;
+		String fName = null, lName = null;
+		while(orginal_result.next()){
+			id = orginal_result.getInt("authorID");
 			if(id == 16){
-				String firstName = rs1.getString("firstName");
-				String lastName = rs1.getString("lastName");
-				System.out.println(id + "\t" + firstName + "\t" + lastName);
+				fName = orginal_result.getString("firstName");
+				lName = orginal_result.getString("lastName");
 			}
 		}
 
+		System.out.println("Author's name at id#"+id+" changed from: ");
+		System.out.println("\tFROM:" + fName + " " + lName);
+
 		// Update Author's information
-		String query5Author = "UPDATE authors SET firstName = 'NotWilliam' WHERE authorID= 16";
-		stmt.executeUpdate(query5Author);
+		String queryAuthor = "UPDATE authors SET firstName = 'William' WHERE authorID= 16";
+		stmt.executeUpdate(queryAuthor);
 		
 		// Prints the Updated Value
-		ResultSet rs2 = stmt.executeQuery(query);
-		while(rs2.next()){
-			int id = rs2.getInt("authorID");
+		ResultSet updated_result = stmt.executeQuery(query);
+		id = 0;
+		String updatedFName = null, updatedLName = null;
+		while(updated_result.next()){
+			id = updated_result.getInt("authorID");
 			if(id == 16){
-				System.out.println(" to ");
-				
-				String updatedFName = rs2.getString("firstName");
-				String updatedLName = rs2.getString("lastName");
-				System.out.println(id + "\t" + updatedFName + "\t" + updatedLName);
-				
+				updatedFName = updated_result.getString("firstName");
+				updatedLName = updated_result.getString("lastName");
 			}
 		}
-		
-		System.out.println();
-		// Prints the Update Author table
-		rs2 = stmt.executeQuery(query);
-		System.out.println("----***-----");
-		System.out.println("Show all Authors");
-		System.out.println();
-		while (rs2.next()) {
-			int id = rs2.getInt("authorID");
-			String firstName = rs2.getString("firstName");
-			String lastName = rs2.getString("lastName");
-			System.out.println(id + "\t" + firstName + "\t" + lastName);
+		System.out.println("\tTO:" + updatedFName + " " + updatedLName);
+
+		// Printing the updated author table
+		updated_result = stmt.executeQuery(query);
+		System.out.println("\n*****************Printing Updated Table*****************\n");
+		System.out.println("Authors table:");		
+		while (updated_result.next()) {
+			id = updated_result.getInt("authorID");
+			fName = updated_result.getString("firstName");
+			lName = updated_result.getString("lastName");
+			if(fName.length() < 8) {
+	      	System.out.println(id + "\t\t" + fName + "\t\t" + lName);
+			} else {
+				System.out.println(id + "\t\t" + fName + "\t" + lName);
+			}
 		}
-		
-		String query5AuthorToOriginal = "UPDATE authors SET firstName = 'William' WHERE authorID= 16";
-		stmt.executeUpdate(query5AuthorToOriginal);
 	}
 
 	/* Add a new title for an author */
 	public static void query6(Statement stmt) throws SQLException {
-		// Create new publisher for new title
-		String query6Publisher = "INSERT INTO Publishers (publisherName)" +
-	      				       "VALUES ('Crown')"; 
-		stmt.executeUpdate(query6Publisher);
-		System.out.println("Added Publisher 'Crown' ");
-
+		// Create new publisher for new book
+		String queryPublisher = "INSERT INTO Publishers (publisherName)" +
+	      				       "VALUES ('Grand Central Publishing')"; 
+		stmt.executeUpdate(queryPublisher);
+		System.out.println("Added the publisher: 'Grand Central Publishing' ");
 		
-		// Add new title
-		String query6Title = "INSERT INTO Titles (isbn, title, editionNumber, year, publisherID, price)" +
-									"VALUES ('0553448122', 'Artemis: A Novel', '1', '2017', (SELECT publisherID FROM Publishers WHERE publisherName = 'Crown'), '16.20')"; 
-		stmt.executeUpdate(query6Title);
-		System.out.println("Added title 'Artemis: A Novel' ");
+		// Adding a new book
+		String queryTitle = "INSERT INTO Titles (isbn, title, editionNumber, year, publisherID, price)" +
+									"VALUES ('0446310786', 'To Kill a Mockingbird', '1', '1988', (SELECT publisherID FROM Publishers WHERE publisherName = 'Grand Central Publishing'), '7.30')"; 
+		stmt.executeUpdate(queryTitle);
+		System.out.println("Added the book 'To Kill a Mockingbird' ");
 
-
-		// Link new title to author (In this case Andy Weir)
-		String query6authorISBN = "INSERT INTO authorISBN (authorID, isbn)" +
-									"VALUES ((SELECT authorID FROM Authors WHERE firstName = 'Andy' AND lastName = 'Weir'), '0553448122')"; 
-		stmt.executeUpdate(query6authorISBN);
-		System.out.println("Added authorISBN relation");
+		// Link the new title to the author
+		String queryAuthorISBN = "INSERT INTO authorISBN (authorID, isbn)" +
+									"VALUES ((SELECT authorID FROM Authors WHERE firstName = 'Harper' AND lastName = 'Lee'), '0446310786')"; 
+		stmt.executeUpdate(queryAuthorISBN);
+		System.out.println("Updated authorISBN in regards to the newly added book");
 
 		// Print modified tables
-		String exampleQuery2 = "SELECT * FROM Titles"; 
-		System.out.println("Titles:");
-		ResultSet rs2 = stmt.executeQuery(exampleQuery2);
-		while (rs2.next()) {
-			String isbn = rs2.getString("isbn");
-			String title = rs2.getString("title");
-			int edition = rs2.getInt("editionNumber");
-			String year = rs2.getString("year");
-			int pubID = rs2.getInt("publisherID");
-			float price = rs2.getFloat("price");
-			System.out.println(isbn + "\t" + title + "\t" + edition + "\t" + year + "\t" + pubID + "\t" + price);
+		System.out.println("*****************Printing Updated Table*****************\n");
+
+		queryPublisher = "SELECT * FROM Publishers"; 
+		System.out.println("Updated publishers:");
+		ResultSet resultPub = stmt.executeQuery(queryPublisher);
+		while (resultPub.next()) {
+			int id = resultPub.getInt("publisherID");
+			String pName = resultPub.getString("publisherName");
+			System.out.println(id + "\t" + pName);
 		}
 
-		String exampleQuery3 = "SELECT * FROM Publishers"; 
-		System.out.println("Publishers:");
-		ResultSet rs3 = stmt.executeQuery(exampleQuery3);
-		while (rs3.next()) {
-			int id = rs3.getInt("publisherID");
-			String name = rs3.getString("publisherName");
-			System.out.println(id + "\t" + name);
+		queryTitle = "SELECT * FROM Titles"; 
+		System.out.println("\nUpdated titles table:");
+		ResultSet resultTitle = stmt.executeQuery(queryTitle);
+		while (resultTitle.next()) {
+			String isbn = resultTitle.getString("isbn");
+			String title = resultTitle.getString("title");
+			int ed = resultTitle.getInt("editionNumber");
+			String year = resultTitle.getString("year");
+			int pID = resultTitle.getInt("publisherID");
+			float price = resultTitle.getFloat("price");
+
+			System.out.print(isbn + "\t" + title); 
+			if(title.length() < 8) {
+	      	System.out.print("\t\t\t\t\t");
+			} else  if(title.length() < 16) {
+	      	System.out.print("\t\t\t\t");
+			} else  if(title.length() < 24) {
+	      	System.out.print("\t\t\t");
+			} else  if(title.length() < 32) {
+	      	System.out.print("\t\t");
+			} else {
+				System.out.print("\t");
+			}
+			System.out.print(ed + "\t" + year + "\t" + pID + "\t" + price+"\n");
 		}
 
-		String exampleQuery4 = "SELECT * FROM authorISBN";
-		System.out.println("authorISBN:"); 
-		ResultSet rs4 = stmt.executeQuery(exampleQuery4);
-		while (rs4.next()) {
-			int id = rs4.getInt("authorID");
-			String isbn = rs4.getString("isbn");
+		queryAuthorISBN = "SELECT * FROM authorISBN";
+		System.out.println("\nUpdated authorISBN table:"); 
+		ResultSet resultAuthorISBN = stmt.executeQuery(queryAuthorISBN);
+		while (resultAuthorISBN.next()) {
+			int id = resultAuthorISBN.getInt("authorID");
+			String isbn = resultAuthorISBN.getString("isbn");
 			System.out.println(id + "\t" + isbn);
 		}
 	}
 
 	/* Add a new publisher */
 	public static void query7(Statement stmt) throws SQLException {
-		String query4Publisher = "INSERT INTO Publishers(publisherName)" + "VALUES('Random House')";
-			
-		stmt.executeUpdate(query4Publisher);
+		String queryPublisher = "INSERT INTO Publishers(publisherName)" + "VALUES('Forge Books')";
+		stmt.executeUpdate(queryPublisher);
+		System.out.println("Added publisher 'Forge Books'\n");
+
+		// Print updated table
+		System.out.println("*****************Printing Updated Table*****************\n");
+		System.out.println("Publishers table:");
 
 		String query = "SELECT * FROM publishers"; 
-
-		
-		System.out.println("Added publisher 'Random House':");
-		
-		ResultSet rs1 = stmt.executeQuery(query);
-		
-		
-		while (rs1.next()) {
-			int id = rs1.getInt("publisherID");
-			String publisherName = rs1.getString("publisherName");
-			System.out.println(id + "\t" + publisherName);
+		ResultSet result = stmt.executeQuery(query);
+		while (result.next()) {
+			int id = result.getInt("publisherID");
+			String pName = result.getString("publisherName");
+			System.out.println(id + "\t" + pName);
 		}
 	}
 
 	/* Edit/Update the existing information about a publisher */
 	public static void query8(Statement stmt) throws SQLException {
-		// Display all current information to see original listing
-		String query8View = "SELECT * FROM publishers;";
-
-		System.out.println("Show all publishers Here!");
-
-		ResultSet rs1 = stmt.executeQuery(query8View);
-
-		while (rs1.next()) {
-			int id = rs1.getInt("publisherID");
-			String pubName = rs1.getString("publisherName");
-			System.out.println(id + "\t" + pubName);
-		}
 		
-		String query8Publisher = "UPDATE publishers SET publisherName='Lupin' WHERE publisherID = 1";
+		String query = "SELECT * FROM publishers"; 
 
-		// executeUpdate to manipulate data information for update command
-		stmt.executeUpdate(query8Publisher);
-		System.out.println("Command being executed: " + query8Publisher);
-		ResultSet rs2 = stmt.executeQuery(query8View);
-		while (rs2.next()) {
-			int id = rs2.getInt("publisherID");
-			String pubName = rs2.getString("publisherName");
-			System.out.println(id + "\t" + pubName);
+		// Retrieve and print the original Value
+		ResultSet orginal_result = stmt.executeQuery(query);
+
+		int id = 0;
+		String pName = null;
+		boolean end = false;
+		while(orginal_result.next() && !end){
+			id = orginal_result.getInt("publisherID");
+			if(id == 8){
+				pName = orginal_result.getString("publisherName");
+				end = true;
+			}
 		}
+
+		System.out.println("Publisher's name at id#"+id+" changed from: ");
+		System.out.println("\tFROM:" + pName);
+
+		// Update Publisher's information
+		String queryPublisher = "UPDATE publishers SET publisherName='Yanny Leaf' WHERE publisherID=8";
+		stmt.executeUpdate(queryPublisher);
 		
+		// Prints the Updated Value
+		ResultSet updated_result = stmt.executeQuery(query);
+		id = 0;
+		String updatedPName = null;
+		while(updated_result.next()){
+			id = updated_result.getInt("publisherID");
+			if(id == 8){
+				updatedPName = updated_result.getString("publisherName");
+			}
+		}
+		System.out.println("\tTO:" + updatedPName);
+
+		// Printing the updated publishers table
+		updated_result = stmt.executeQuery(query);
+		System.out.println("\n*****************Printing Updated Table*****************\n");
+		System.out.println("Publishers table:");		
+		while (updated_result.next()) {
+			id = updated_result.getInt("publisherID");
+			pName = updated_result.getString("publisherName");
+			
+			System.out.println(id + "\t" + pName);
+		}
+
 		// Reset the Information
-		String resetQuery = "UPDATE publishers SET publisherName='Penguin' WHERE publisherID = 1";
+		String resetQuery = "UPDATE publishers SET publisherName='Laurel Leaf' WHERE publisherID = 8";
 		stmt.executeUpdate(resetQuery);
 	}
 

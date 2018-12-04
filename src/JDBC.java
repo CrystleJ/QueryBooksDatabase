@@ -1,5 +1,6 @@
 import java.util.*;
 import java.sql.*;
+import java.io.Console;
 
 public class JDBC {
 
@@ -25,20 +26,21 @@ public class JDBC {
 			System.out.print("\tEnter your database url: ");
 			url = scan.next();
 
-			System.out.print("\n\tEnter your database username: ");
+			System.out.print("\tEnter your database username: ");
 			username = scan.next();
 
-			System.out.print("\n\tEnter your database password: ");
-			password = scan.next();
+			Console console = System.console();
+			char passwordArray[] = console.readPassword("\tEnter your database password: ");
+			password = new String(passwordArray);
 		}
 
-		System.out.println("\nTrying to connect to database ... ");
+		System.out.println("Trying to connect to database ... ");
 		connection = DriverManager.getConnection(url, username, password);
 
 		if(connection == null) {
 			throw new SQLException();
 		} else {
-			System.out.println("Successfully connected");
+			System.out.println("Successfully connected!");
 		}
     }
 
