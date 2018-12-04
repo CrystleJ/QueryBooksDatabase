@@ -11,6 +11,6 @@
 ## Running the Code
 1. Compile all the java files and run CreateTables.java (This should create the necessary table with some test data)
 2. Enter your database url, username and password. The database url should be jdbc:mysql://< your connection name >:< your connection port number >/Booksdatabase?autoReconnect=true&useSSL=false. The username and password will be your connection username and password.
-3. Run TestQueries.java and repeat Step 2 (It should run a query to list all the authors in alphabetical order)
+3. Run TestQueries.java and repeat Step 2 (It should execute the eight queries)
 
 PS: To avoid having to do Step 2 mutiple times, initialize the three values on line 19 of JDBC.java with your database url, username, and password. (If you do so, don't push this change).
